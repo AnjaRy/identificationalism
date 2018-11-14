@@ -54,30 +54,41 @@ class Trainer(object):
         """
         Reads lines from the raw training data.
         """
+        
+        # Dictionnary, der für jeden key, auch wenn nicht instanziiert, einen Standardvalue hat (in diesem Fall eine Leere Liste)
+        # -> sonst müsste man das mit ifschleife lösen
+        
         d = defaultdict(list)
 
+        # checken ob datei vorhanden, sonst error
         if self._data:
             data = codecs.open(self._data, "r", "UTF-8")
         else:
             logging.warning("--data not found, assuming input from STDIN")
             data = sys.stdin
 
+        # csv Datei wird durch dict reader in dictionnary verwandelt    
         reader = csv.DictReader(data, delimiter=",", quotechar='"')
 
+        # Dictionnary mit Name (label) als key, einzelne Texte als listenelemente
         for row in reader:
             X, y = row['Text'], row['Label']
             d[y].append(X)
 
+        # Infos für user    
         logging.debug("Examples per class:")
         for k, v in d.items():
             logging.debug("%s %d" % (k, len(v)))
         logging.debug("Total training examples: %d\n" %
                       sum([len(v) for v in d.values()]))
 
+        # Klassenattribute bestimmen: sortierte Philosophen und die Anzahl Klassen
         self.classes = d.keys()
         self.classes = sorted(self.classes)
         self.num_classes = len(self.classes)
 
+        # Von jedem Philosophen das erste Sample als logging ausgeben
+        # Liste von Tupeln (Text, Philosophe) erstellen
         l = []
         logging.debug("Samples from the data:")
         for k, values in d.items():
@@ -86,12 +97,13 @@ class Trainer(object):
                 l.append( (value, k) )
 
         # shuffle, just to be sure
+        # Trennt Tuple auf in train_x = Texte und train_y = Philosophen, auch beides Tupel
         random.shuffle(l)
         self.train_X, self.train_y = zip(*l)
 
     def _build_pipeline(self):
         """
-        Builds an sklearn Pipeline. The pipeline consists of a kind of
+        Builds a sklearn Pipeline. The pipeline consists of a kind of
         vectorizer, followed by a kind of classifier.
         """
         self.vectorizer = CountVectorizer(stop_words=None)
