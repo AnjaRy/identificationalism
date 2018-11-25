@@ -185,6 +185,8 @@ class Predictor(object):
         logging.debug("Number of gold samples found: %d" % len(test_y))
 
         predictions = self.predict(test_X, label_only=True)
+        
+        #Cross Validation? (ibt sicher ein sklearn teil dafür)
         logging.info(metrics.classification_report(test_y, predictions, target_names=None))
 
 
