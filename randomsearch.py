@@ -1,3 +1,4 @@
+import pandas as pd
 from sklearn.model_selection import RandomizedSearchCV
 from baseline import Trainer
 from sklearn.neighbors import KNeighborsClassifier
@@ -8,7 +9,7 @@ my_trainer._preprocess()
 
 # bigger search space
 knn = KNeighborsClassifier()
-k_nearest = range(0,50, 5)
+k_nearest = list(range(0,50, 5))
 
 # define parameters whose value space needs to be searched
 param_grid = {'n_neighbors': k_nearest}
@@ -36,6 +37,8 @@ pd.options.display.max_colwidth = 100
 
 df = pd.DataFrame.from_dict(random_search.cv_results_)
 df = df.sort_values(by=["rank_test_score"])
+df_relevant = df['rank_test_score', 'mean_test_score', 'params',  'mean_fit_time']
 
 print(df)
+print(df_relevant)
 print(random_search.best_params_)
