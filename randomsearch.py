@@ -20,7 +20,7 @@ random_search = RandomizedSearchCV( estimator=knn,
                                    # zehn zufällige möglichkeiten
                                     cv=10,
                                     scoring='accuracy',
-                                    n_jobs=1,
+                                    n_jobs=4,
                                     return_train_score=True,
                                     random_state=42)
 
