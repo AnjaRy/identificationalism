@@ -9,7 +9,7 @@ my_trainer._preprocess()
 
 # bigger search space
 knn = KNeighborsClassifier()
-k_nearest = list(range(0,50, 5))
+k_nearest = list(range(0,50,5))
 
 # define parameters whose value space needs to be searched
 param_grid = {'n_neighbors': k_nearest}
