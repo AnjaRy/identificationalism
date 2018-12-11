@@ -16,7 +16,7 @@ param_grid = {'n_neighbors': k_nearest}
 
 random_search = RandomizedSearchCV( estimator=knn,
                                     param_distributions=param_grid,
-                                    n_iter=10,
+                                    n_iter=1,
                                    # zehn zufällige möglichkeiten
                                     cv=10,
                                     scoring='accuracy',
