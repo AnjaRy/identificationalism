@@ -38,12 +38,12 @@ def randomsearch(max):
 
 	pd.options.display.max_colwidth = 100 
 
-	df = pd.DataFrame.from_dict(random_search.cv_results_)
-	df = df.sort_values(by=["rank_test_score"])
-	df_relevant = df[['rank_test_score', 'mean_test_score', 'params',  'mean_fit_time']]
+	data = pd.DataFrame.from_dict(random_search.cv_results_)
+	data_sort = data.sort_values(by=["rank_test_score"])
+	data_relevant = data_sort[['rank_test_score', 'mean_test_score', 'params',  'mean_fit_time']]
 
-	print(df)
-	print(df_relevant)
+	print(data)
+	print(data_relevant)
 	print(random_search.best_params_)
 	print('NEXT')
 
