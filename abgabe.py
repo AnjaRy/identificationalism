@@ -5,8 +5,6 @@
 
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
-#from sklearn.naive_bayes import GaussianNB
-#from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn import metrics
 
@@ -103,24 +101,10 @@ class Trainer(object):
         random.shuffle(l)
         self.train_X, self.train_y = zip(*l)
 
-    def preprocess_strings(self, string):
-        # all lowercase
-        
-        '''s = ''
-        for char in string:
-            if char.isalpha() or char == ' ':
-                s += char.lower()
-        return s'''
-        return string.lower()
-
-        #preprocessing anja MÜ  
 
     def tokenizer(self, string):
         from nltk import word_tokenize
         return word_tokenize(string)
-
-
-
 
     def _build_pipeline(self):
         """
@@ -129,11 +113,12 @@ class Trainer(object):
         """
         from nltk.corpus import stopwords
         sw = stopwords.words("english")
-        sw.append(["ve", "ll", "re"]) #t and s already included 
+        #sw.append(["ve", "ll", "re"]) #t and s already included 
         #https://gist.github.com/sebleier/554280
-        self.vectorizer = TfidfVectorizer(stop_words=sw, strip_accents='ascii', preprocessor=None, tokenizer=self.tokenizer) ###
+        self.vectorizer = TfidfVectorizer(stop_words=sw, strip_accents='ascii', tokenizer=self.tokenizer) ###
         #self.classifier = GaussianNB(stop_words = GaussianNB.get_stop_words()) ###
-        self.classifier = SVC(kernel='linear', class_weight={"HU":52218/10415, "MI":52218/17426, "KA":52218/13054, "RU":52218/11323}, max_iter=-1) 
+        self.classifier = SVC(C=46, gamma=860, kernel='linear', class_weight='balanced', decision_function_shape='ovo', max_iter=-1) 
+        #{"HU":52218/10415, "MI":52218/17426, "KA":52218/13054, "RU":52218/11323}
         #class-weight = dict{class_label:value}
         self.pipeline = Pipeline([
             ("vectorizer", self.vectorizer),
